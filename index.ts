@@ -9,7 +9,7 @@ const equal: HTMLElement = document.querySelector('.calculator__equal')
 const digits: NodeListOf<Element> = document.querySelectorAll('.calculator__digit')
 let ourNumber: number = 0;
 let sign: string = '';
-let secondNumber: number;
+let secondNumber: string = '';
 
 sum.addEventListener("click", function () {
     sign = 'sum'
@@ -24,14 +24,38 @@ divide.addEventListener("click", function () {
     sign = 'divide'
 })
 
-equal.addEventListener('click', function (){
-    
+equal.addEventListener('click', function () {
+    switch (sign) {
+        case 'sum':
+            ourNumber += Number(secondNumber)
+            count.innerText = String(ourNumber)
+            sign = ''
+            secondNumber = ''
+            break
+        case 'minus':
+            ourNumber -= Number(secondNumber)
+            count.innerText = String(ourNumber)
+            sign = ''
+            secondNumber = ''
+            break
+        case 'multiply':
+            ourNumber *= Number(secondNumber)
+            count.innerText = String(ourNumber)
+            sign = ''
+            secondNumber = ''
+            break
+        case 'divide':
+            ourNumber /= Number(secondNumber)
+            count.innerText = String(ourNumber)
+            sign = ''
+            secondNumber = ''
+            break
+    }
 })
 
 digits.forEach(function (elem) {
     elem.addEventListener("click", function () {
         if (!count.innerHTML) {
-            debugger;
             count.innerHTML = elem.innerHTML;
         } else {
             if (count.innerHTML && sign === '') {
@@ -39,35 +63,14 @@ digits.forEach(function (elem) {
             }
             if (count.innerHTML && sign !== '') {
                 ourNumber = Number(count.innerHTML);
-                switch (sign) {
-                    case 'sum':
-                        ourNumber += Number(elem.innerHTML);
-                        count.innerText = String(ourNumber);
-                        sign = '';
-                        break;
-                    case 'minus':
-                        ourNumber -= Number(elem.innerHTML);
-                        count.innerText = String(ourNumber);
-                        sign = '';
-                        break;
-                    case 'multiply':
-                        ourNumber *= Number(elem.innerHTML);
-                        count.innerText = String(ourNumber);
-                        sign = '';
-                        break;
-                    case 'divide':
-                        ourNumber /= Number(elem.innerHTML);
-                        count.innerText = String(ourNumber);
-                        sign = '';
-                        break;
-                }
+                secondNumber += elem.innerHTML;
+                console.log(ourNumber, secondNumber)
             }
         }
-        console.log(sign)
     })
 })
 
-document.addEventListener('click', function (){
+document.addEventListener('click', function () {
     switch (sign) {
         case 'minus':
             minus.style.backgroundColor = 'red'
@@ -101,6 +104,6 @@ document.addEventListener('click', function (){
             break
     }
 })
-deletePicture.addEventListener('click', function (){
+deletePicture.addEventListener('click', function () {
     count.innerHTML = count.innerHTML.split('').slice(0, count.innerHTML.length - 1).join('')
 })
